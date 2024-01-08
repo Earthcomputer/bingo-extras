@@ -1,0 +1,10 @@
+{
+  "bingo_extras.clearspawnpoint.success": "Cleared your spawn point",
+  "bingo_extras.setentityval.exhaustion.success": "Set the exhaustion of %s players to %s",
+  "bingo_extras.setentityval.food.success": "Set the food level of %s players to %s",
+  "bingo_extras.setentityval.health.success": "Set the health of %s entities to %s",
+  "bingo_extras.setentityval.saturation.success": "Set the saturation of %s players to %s",
+  "bingo_extras.setstat.success": "Set stat %s of %s players to %s",
+  "bingo_extras.teamspawnpoint.clear.success": "Cleared the spawn point of team %s",
+  "bingo_extras.teamspawnpoint.set.success": "Set the spawn point of team %s to (%s, %s, %s)"
+}

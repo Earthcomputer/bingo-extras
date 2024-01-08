@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.earthcomputer.bingoextras.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerListMixin",
+    "PlayerTeamMixin",
+    "RandomizableContainerBlockEntityMixin",
+    "ScoreboardSaveDataMixin",
+    "ServerCommonPacketListenerImplMixin",
+    "ServerPlayerMixin",
+    "bingo.DistanceFromSpawnConditionMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

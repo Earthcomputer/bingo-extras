@@ -1,0 +1,17 @@
+package net.earthcomputer.bingoextras.command;
+
+import com.mojang.brigadier.CommandDispatcher;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+
+public final class BingoExtrasCommands {
+    private BingoExtrasCommands() {
+    }
+
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
+        ClearSpawnPointCommand.register(dispatcher);
+        SetEntityValCommand.register(dispatcher);
+        SetStatCommand.register(dispatcher, context);
+        TeamSpawnPointCommand.register(dispatcher);
+    }
+}

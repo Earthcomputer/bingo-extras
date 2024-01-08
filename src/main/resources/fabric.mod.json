@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "bingo-extras",
+  "version": "${version}",
+  "name": "bingo-extras",
+  "description": "Helper mod for testing the bingo mod",
+  "authors": [
+    "Earthcomputer"
+  ],
+  "contact": {
+    "repo": "https://github.com/Earthcomputer/bingo-extras"
+  },
+  "license": "MIT",
+  "icon": "assets/bingo-extras/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.earthcomputer.bingoextras.client.BingoExtrasClient"
+    ],
+    "main": [
+      "net.earthcomputer.bingoextras.BingoExtras"
+    ]
+  },
+  "mixins": [
+    "bingo-extras.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "${minecraft_version}",
+    "fabricloader": ">=0.15",
+    "fabric": "*"
+  }
+}
