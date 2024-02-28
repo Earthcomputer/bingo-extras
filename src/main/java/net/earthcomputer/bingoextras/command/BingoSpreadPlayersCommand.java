@@ -12,11 +12,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.scores.PlayerTeam;
 import org.joml.Vector2d;
@@ -181,7 +183,17 @@ public final class BingoSpreadPlayersCommand {
 
             return startY;
         } else {
-            return level.getChunk(x >> 4, z >> 4).getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) + 1;
+            LevelChunk chunk = level.getChunk(x >> 4, z >> 4);
+            BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, 0, z);
+            for (int y = chunk.getSectionYFromSectionIndex(chunk.getHighestFilledSectionIndex()) * 16 + 16; y > level.getMinBuildHeight(); y--) {
+                BlockState stateBelow = chunk.getBlockState(pos.setY(y - 1));
+                //noinspection deprecation
+                if (stateBelow.blocksMotion() && !stateBelow.is(BlockTags.LEAVES)) {
+                    return y;
+                }
+            }
+
+            return level.getMinBuildHeight();
         }
     }
 
@@ -191,7 +203,7 @@ public final class BingoSpreadPlayersCommand {
         int surfaceHeight = findSurface(level, Mth.floor(input.x), Mth.floor(input.y));
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(Mth.floor(input.x), surfaceHeight, Mth.floor(input.y));
         if (canSpawnAt(level, pos)) {
-            return new Vector3d(input.x, surfaceHeight, input.y);
+            return new Vector3d(Math.floor(input.x) + 0.5, surfaceHeight, Math.floor(input.y) + 0.5);
         }
 
         for (int radius = 1; radius <= 50; radius++) {
@@ -199,24 +211,29 @@ public final class BingoSpreadPlayersCommand {
                 int dz = radius - Math.abs(dx);
                 surfaceHeight = findSurface(level, Mth.floor(input.x) + dx * STRIDE, Mth.floor(input.y) + dz * STRIDE);
                 if (canSpawnAt(level, pos.set(Mth.floor(input.x) + dx * STRIDE, surfaceHeight, Mth.floor(input.y) + dz * STRIDE))) {
-                    return new Vector3d(input.x + dx * STRIDE, surfaceHeight, input.y + dz * STRIDE);
+                    return new Vector3d(Math.floor(input.x) + 0.5 + dx * STRIDE, surfaceHeight, Math.floor(input.y) + 0.5 + dz * STRIDE);
                 }
 
                 dz = Math.abs(dx + 1) - radius;
                 surfaceHeight = findSurface(level, Mth.floor(input.x) + (dx + 1) * STRIDE, Mth.floor(input.y) + dz * STRIDE);
                 if (canSpawnAt(level, pos.set(Mth.floor(input.x) + (dx + 1) * STRIDE, surfaceHeight, Mth.floor(input.y) + dz * STRIDE))) {
-                    return new Vector3d(input.x + dx * STRIDE, surfaceHeight, input.y + dz * STRIDE);
+                    return new Vector3d(Math.floor(input.x) + 0.5 + dx * STRIDE, surfaceHeight, Math.floor(input.y) + 0.5 + dz * STRIDE);
                 }
             }
         }
 
         surfaceHeight = findSurface(level, Mth.floor(input.x), Mth.floor(input.y));
-        return new Vector3d(input.x, surfaceHeight, input.y);
+        return new Vector3d(Math.floor(input.x) + 0.5, surfaceHeight, Math.floor(input.y) + 0.5);
     }
 
     @SuppressWarnings("deprecation") // Mojang studios
     private static boolean canSpawnAt(ServerLevel level, BlockPos pos) {
-        return !level.getBlockState(pos).isSolid() && !level.getBlockState(pos.above()).isSolid() && level.getBlockState(pos.below()).blocksMotion();
+        BlockState blockHere = level.getBlockState(pos);
+        BlockState blockAbove = level.getBlockState(pos.above());
+        BlockState blockBelow = level.getBlockState(pos.below());
+        return !blockHere.isSolid() && blockHere.getFluidState().isEmpty() &&
+            !blockAbove.isSolid() && blockAbove.getFluidState().isEmpty() &&
+            blockBelow.blocksMotion();
     }
 
     private static boolean isValidPoint(Vector2d[][] grid, double cellsize,
