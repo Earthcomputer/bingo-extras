@@ -36,6 +36,8 @@ public final class FullBrightCommand {
             livingEntity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, MobEffectInstance.INFINITE_DURATION, 0, false, false, false));
         }
 
+        source.sendSuccess(() -> BingoExtras.translatable("bingo_extras.fullbright.success"), false);
+
         return Command.SINGLE_SUCCESS;
     }
 }
