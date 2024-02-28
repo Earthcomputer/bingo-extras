@@ -185,7 +185,7 @@ public final class BingoSpreadPlayersCommand {
         }
     }
 
-    private static Vector3d adjustToSafeLocation(ServerLevel level, Vector2d input) {
+    public static Vector3d adjustToSafeLocation(ServerLevel level, Vector2d input) {
         final int STRIDE = 4;
 
         int surfaceHeight = findSurface(level, Mth.floor(input.x), Mth.floor(input.y));
