@@ -5,12 +5,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.commands.LootCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -57,9 +58,9 @@ public final class PlaceBonusChestCommand {
             blockEntity.setLootTable(lootTable);
         }
 
-        for (int y = level.getMinBuildHeight(); y < level.getMaxBuildHeight(); y++) {
-            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK_MARKER, Blocks.OAK_PLANKS.defaultBlockState()), pos.getX() + 0.5, y + 0.5, pos.getZ() + 0.5, 1, 0, 0, 0, 0);
-        }
+        ItemEntity item = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.875, pos.getZ() + 0.5, new ItemStack(Items.TORCH), 0, 0, 0);
+        item.setGlowingTag(true);
+        level.addFreshEntity(item);
 
         return Command.SINGLE_SUCCESS;
     }
