@@ -2,6 +2,7 @@
   "bingo_extras.bingospreadplayers.failedToSpread": "Failed to spread players",
   "bingo_extras.bingospreadplayers.success": "Successfully spread players",
   "bingo_extras.clearspawnpoint.success": "Cleared your spawn point",
+  "bingo_extras.fullbright.notLivingEntity": "%s is not a living entity",
   "bingo_extras.setentityval.exhaustion.success": "Set the exhaustion of %s players to %s",
   "bingo_extras.setentityval.food.success": "Set the food level of %s players to %s",
   "bingo_extras.setentityval.health.success": "Set the health of %s entities to %s",
