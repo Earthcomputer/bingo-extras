@@ -56,8 +56,8 @@ public final class BingoSpreadPlayersCommand {
                                         .executes(ctx -> bingoSpreadPlayers(
                                             ctx.getSource(),
                                             getVec2(ctx, "center"),
-                                            getInteger(ctx, "maxDistance"),
-                                            getInteger(ctx, "distanceBetweenTeams"),
+                                            getDouble(ctx, "maxDistance"),
+                                            getDouble(ctx, "distanceBetweenTeams"),
                                             getBool(ctx, "respectTeams"),
                                             getEntities(ctx, "targets"),
                                             getBool(ctx, "sameBiome"),
