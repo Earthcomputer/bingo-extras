@@ -9,6 +9,7 @@ public final class BingoExtrasCommands {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
+        BingoSpreadPlayersCommand.register(dispatcher, context);
         ClearSpawnPointCommand.register(dispatcher);
         SetEntityValCommand.register(dispatcher);
         SetStatCommand.register(dispatcher, context);
