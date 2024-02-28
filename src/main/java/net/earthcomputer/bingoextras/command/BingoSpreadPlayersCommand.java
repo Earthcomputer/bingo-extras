@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.scores.PlayerTeam;
 import org.joml.Vector2d;
+import org.joml.Vector3d;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +32,6 @@ import java.util.function.Predicate;
 
 import static com.mojang.brigadier.arguments.BoolArgumentType.*;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.*;
-import static com.mojang.brigadier.arguments.IntegerArgumentType.*;
 import static net.minecraft.commands.Commands.*;
 import static net.minecraft.commands.arguments.EntityArgument.*;
 import static net.minecraft.commands.arguments.ResourceOrTagArgument.*;
@@ -80,12 +80,13 @@ public final class BingoSpreadPlayersCommand {
             throw new AssertionError("No groups");
         }
 
+        RandomSource rand = RandomSource.create();
+        Util.shuffle(groups, rand);
+
         double minX = (double) center.x - maxDistance;
         double minZ = (double) center.y - maxDistance;
         double maxX = (double) center.x + maxDistance;
         double maxZ = (double) center.y + maxDistance;
-
-        RandomSource rand = RandomSource.create();
 
         List<Vector2d> possibleSpreadPoints = poissonDiskSampling(rand, distanceBetweenTeams, minX, minZ, maxX, maxZ);
         if (possibleSpreadPoints.size() < groups.size()) {
@@ -130,12 +131,9 @@ public final class BingoSpreadPlayersCommand {
         }
 
         for (int i = 0; i < groups.size(); i++) {
-            Vector2d point = spreadPoints.get(i);
-            int height = findSurface(level, Mth.floor(point.x), Mth.floor(point.y));
-            // TODO: don't spawn people inside blocks in the nether if it found no surface
-            // TODO: same with the end and spawning above air
+            Vector3d dest = adjustToSafeLocation(level, spreadPoints.get(i));
             for (Entity entity : groups.get(i)) {
-                entity.teleportTo(level, point.x, height, point.y, Set.of(), entity.getYRot(), entity.getXRot());
+                entity.teleportTo(level, dest.x, dest.y, dest.z, Set.of(), entity.getYRot(), entity.getXRot());
             }
         }
 
@@ -176,12 +174,7 @@ public final class BingoSpreadPlayersCommand {
                 if (startY + dy >= level.getMinBuildHeight() + level.dimensionType().logicalHeight()) {
                     continue;
                 }
-                // Mojang studios
-                //noinspection deprecation
-                if (level.isEmptyBlock(pos.setY(startY + dy)) &&
-                    level.isEmptyBlock(pos.setY(startY + dy + 1)) &&
-                    level.getBlockState(pos.setY(startY + dy - 1)).blocksMotion()
-                ) {
+                if (canSpawnAt(level, pos.setY(startY + dy))) {
                     return startY + dy;
                 }
             }
@@ -190,6 +183,40 @@ public final class BingoSpreadPlayersCommand {
         } else {
             return level.getChunk(x >> 4, z >> 4).getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) + 1;
         }
+    }
+
+    private static Vector3d adjustToSafeLocation(ServerLevel level, Vector2d input) {
+        final int STRIDE = 4;
+
+        int surfaceHeight = findSurface(level, Mth.floor(input.x), Mth.floor(input.y));
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(Mth.floor(input.x), surfaceHeight, Mth.floor(input.y));
+        if (canSpawnAt(level, pos)) {
+            return new Vector3d(input.x, surfaceHeight, input.y);
+        }
+
+        for (int radius = 1; radius <= 50; radius++) {
+            for (int dx = -radius; dx < radius; dx++) {
+                int dz = radius - Math.abs(dx);
+                surfaceHeight = findSurface(level, Mth.floor(input.x) + dx * STRIDE, Mth.floor(input.y) + dz * STRIDE);
+                if (canSpawnAt(level, pos.set(Mth.floor(input.x) + dx * STRIDE, surfaceHeight, Mth.floor(input.y) + dz * STRIDE))) {
+                    return new Vector3d(input.x + dx * STRIDE, surfaceHeight, input.y + dz * STRIDE);
+                }
+
+                dz = Math.abs(dx + 1) - radius;
+                surfaceHeight = findSurface(level, Mth.floor(input.x) + (dx + 1) * STRIDE, Mth.floor(input.y) + dz * STRIDE);
+                if (canSpawnAt(level, pos.set(Mth.floor(input.x) + (dx + 1) * STRIDE, surfaceHeight, Mth.floor(input.y) + dz * STRIDE))) {
+                    return new Vector3d(input.x + dx * STRIDE, surfaceHeight, input.y + dz * STRIDE);
+                }
+            }
+        }
+
+        surfaceHeight = findSurface(level, Mth.floor(input.x), Mth.floor(input.y));
+        return new Vector3d(input.x, surfaceHeight, input.y);
+    }
+
+    @SuppressWarnings("deprecation") // Mojang studios
+    private static boolean canSpawnAt(ServerLevel level, BlockPos pos) {
+        return !level.getBlockState(pos).isSolid() && !level.getBlockState(pos.above()).isSolid() && level.getBlockState(pos.below()).blocksMotion();
     }
 
     private static boolean isValidPoint(Vector2d[][] grid, double cellsize,
