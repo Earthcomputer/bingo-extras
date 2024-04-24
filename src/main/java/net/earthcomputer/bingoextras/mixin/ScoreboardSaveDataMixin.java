@@ -2,7 +2,6 @@ package net.earthcomputer.bingoextras.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.earthcomputer.bingoextras.ext.PlayerTeamExt;
-import net.minecraft.Util;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -32,7 +31,7 @@ public class ScoreboardSaveDataMixin {
     private void onSaveTeam(CallbackInfoReturnable<ListTag> cir, @Local PlayerTeam team, @Local CompoundTag tag) {
         GlobalPos teamSpawnPos = PlayerTeamExt.getTeamSpawnPos(team);
         if (teamSpawnPos != null) {
-            tag.put("bingo_extras:spawn_pos", Util.getOrThrow(GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, teamSpawnPos), IllegalStateException::new));
+            tag.put("bingo_extras:spawn_pos", GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, teamSpawnPos).getOrThrow());
         }
     }
 }

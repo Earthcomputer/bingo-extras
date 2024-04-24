@@ -12,7 +12,7 @@ public final class BingoExtrasCommands {
         BingoSpreadPlayersCommand.register(dispatcher, context);
         ClearSpawnPointCommand.register(dispatcher);
         FullBrightCommand.register(dispatcher);
-        PlaceBonusChestCommand.register(dispatcher);
+        PlaceBonusChestCommand.register(dispatcher, context);
         SetEntityValCommand.register(dispatcher);
         SetStatCommand.register(dispatcher, context);
         TeamSpawnPointCommand.register(dispatcher);
