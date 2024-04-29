@@ -11,6 +11,10 @@ repositories {
         name = 'xpple'
         url = 'https://maven.xpple.dev/maven2'
     }
+    maven {
+        name = 'JitPack'
+        url = 'https://jitpack.io/'
+    }
 }
 
 dependencies {
@@ -20,6 +24,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     include modImplementation("dev.xpple:betterconfig:${project.betterconfig_version}")
+
+    include modImplementation('com.github.Chocohead:Fabric-ASM:v2.3')
+    modImplementation files('libs/fantasy-0.5.0+1.20.5.jar')
 
     compileOnly 'com.demonwav.mcdev:annotations:2.1.0'
 }

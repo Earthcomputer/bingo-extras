@@ -40,7 +40,7 @@ import static net.minecraft.commands.arguments.ResourceOrTagArgument.*;
 import static net.minecraft.commands.arguments.coordinates.Vec2Argument.*;
 
 public final class BingoSpreadPlayersCommand {
-    private static final SimpleCommandExceptionType FAILED_TO_SPREAD_EXCEPTION = new SimpleCommandExceptionType(BingoExtras.translatable("bingo_extras.bingospreadplayers.failedToSpread"));
+    public static final SimpleCommandExceptionType FAILED_TO_SPREAD_EXCEPTION = new SimpleCommandExceptionType(BingoExtras.translatable("bingo_extras.bingospreadplayers.failedToSpread"));
 
     private BingoSpreadPlayersCommand() {
     }
@@ -168,7 +168,7 @@ public final class BingoSpreadPlayersCommand {
         return groups;
     }
 
-    private static int findSurface(ServerLevel level, int x, int z) {
+    public static int findSurface(ServerLevel level, int x, int z) {
         if (level.dimensionType().hasCeiling()) {
             int startY = level.getMinBuildHeight() + (int) (level.dimensionType().logicalHeight() * 0.7);
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, 0, z);

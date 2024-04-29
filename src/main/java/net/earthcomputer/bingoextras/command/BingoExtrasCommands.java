@@ -1,6 +1,7 @@
 package net.earthcomputer.bingoextras.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 
@@ -16,5 +17,9 @@ public final class BingoExtrasCommands {
         SetEntityValCommand.register(dispatcher);
         SetStatCommand.register(dispatcher, context);
         TeamSpawnPointCommand.register(dispatcher);
+
+        if (FabricLoader.getInstance().isModLoaded("fantasy")) {
+            BingoSpreadPlayers4dCommand.register(dispatcher, context);
+        }
     }
 }

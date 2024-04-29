@@ -16,12 +16,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.levelgen.RandomSupport;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.*;
+import static com.mojang.brigadier.arguments.LongArgumentType.*;
 import static net.minecraft.commands.Commands.*;
 import static net.minecraft.commands.arguments.ResourceOrIdArgument.*;
 import static net.minecraft.commands.arguments.coordinates.BlockPosArgument.*;
@@ -35,15 +37,17 @@ public final class PlaceBonusChestCommand {
             .requires(source -> source.hasPermission(2))
             .then(argument("pos", blockPos())
                 .then(argument("radius", integer(0))
-                    .executes(ctx -> placeBonusChest(ctx.getSource(), getBlockPos(ctx, "pos"), getInteger(ctx, "radius"), context.lookupOrThrow(Registries.LOOT_TABLE).getOrThrow(BuiltInLootTables.SPAWN_BONUS_CHEST)))
+                    .executes(ctx -> placeBonusChest(ctx.getSource(), getBlockPos(ctx, "pos"), getInteger(ctx, "radius"), context.lookupOrThrow(Registries.LOOT_TABLE).getOrThrow(BuiltInLootTables.SPAWN_BONUS_CHEST), RandomSupport.generateUniqueSeed()))
                     .then(argument("lootTable", lootTable(context))
                         .suggests(LootCommand.SUGGEST_LOOT_TABLE)
-                        .executes(ctx -> placeBonusChest(ctx.getSource(), getBlockPos(ctx, "pos"), getInteger(ctx, "radius"), getLootTable(ctx, "lootTable")))))));
+                        .executes(ctx -> placeBonusChest(ctx.getSource(), getBlockPos(ctx, "pos"), getInteger(ctx, "radius"), getLootTable(ctx, "lootTable"), RandomSupport.generateUniqueSeed()))
+                        .then(argument("seed", longArg())
+                            .executes(ctx -> placeBonusChest(ctx.getSource(), getBlockPos(ctx, "pos"), getInteger(ctx, "radius"), getLootTable(ctx, "lootTable"), getLong(ctx, "seed"))))))));
     }
 
-    private static int placeBonusChest(CommandSourceStack source, BlockPos pos, int radius, Holder<LootTable> lootTable) {
+    private static int placeBonusChest(CommandSourceStack source, BlockPos pos, int radius, Holder<LootTable> lootTable, long seed) {
         ServerLevel level = source.getLevel();
-        RandomSource rand = RandomSource.create();
+        RandomSource rand = RandomSource.create(seed);
 
         pos = pos.east(rand.nextIntBetweenInclusive(-radius, radius)).south(rand.nextIntBetweenInclusive(-radius, radius));
         Vector3d safeLocation = BingoSpreadPlayersCommand.adjustToSafeLocation(level, new Vector2d(pos.getX(), pos.getZ()));
@@ -59,6 +63,7 @@ public final class PlaceBonusChestCommand {
         level.setBlockAndUpdate(pos, Blocks.CHEST.defaultBlockState());
         if (level.getBlockEntity(pos) instanceof ChestBlockEntity blockEntity) {
             blockEntity.setLootTable(lootTable.unwrapKey().orElseThrow());
+            blockEntity.setLootTableSeed(rand.nextLong());
         }
 
         ItemEntity item = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.875, pos.getZ() + 0.5, new ItemStack(Items.TORCH), 0, 0, 0);

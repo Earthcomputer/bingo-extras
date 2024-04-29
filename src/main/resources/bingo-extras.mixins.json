@@ -10,11 +10,24 @@
     "ScoreboardSaveDataMixin",
     "ServerCommonPacketListenerImplMixin",
     "ServerPlayerMixin",
-    "bingo.DistanceFromSpawnConditionMixin"
+    "bingo.DistanceFromSpawnConditionMixin",
+    "fantasy.ChangeDimensionTriggerInstanceMixin",
+    "fantasy.ChangeDimensionTriggerMixin",
+    "fantasy.EntityMixin",
+    "fantasy.LocationPredicateMixin",
+    "fantasy.PlayerTeamMixin",
+    "fantasy.ServerLevelMixin",
+    "fantasy.ServerPlayerMixin",
+    "fantasy.ServerScoreboardMixin",
+    "fantasy.bingo.BingoGameMixin"
   ],
   "client": [
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "plugin": "net.earthcomputer.bingoextras.mixin.BingoExtrasMixinPlugin"
 }

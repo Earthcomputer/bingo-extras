@@ -19,6 +19,9 @@
     ],
     "main": [
       "net.earthcomputer.bingoextras.BingoExtras"
+    ],
+    "mm:early_risers": [
+      "net.earthcomputer.bingoextras.BingoExtrasEarlyRiser"
     ]
   },
   "mixins": [
