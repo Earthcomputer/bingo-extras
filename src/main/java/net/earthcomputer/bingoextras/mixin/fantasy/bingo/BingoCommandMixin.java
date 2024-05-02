@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Pseudo
 public class BingoCommandMixin {
     @Inject(method = "resetGame", at = @At("RETURN"))
-    private void onEndGame(CommandContext<CommandSourceStack> context, CallbackInfo ci) {
+    private static void onResetGame(CommandContext<CommandSourceStack> context, CallbackInfo ci) {
         for (PlayerTeam team : context.getSource().getServer().getScoreboard().getPlayerTeams()) {
             FantasyUtil.destroyTeamSpecificLevels(team);
         }
