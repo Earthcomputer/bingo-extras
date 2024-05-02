@@ -19,7 +19,7 @@
     "fantasy.ServerLevelMixin",
     "fantasy.ServerPlayerMixin",
     "fantasy.ServerScoreboardMixin",
-    "fantasy.bingo.BingoGameMixin"
+    "fantasy.bingo.BingoCommandMixin"
   ],
   "client": [
   ],

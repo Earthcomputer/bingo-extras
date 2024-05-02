@@ -10,14 +10,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(targets = "io.github.gaming32.bingo.game.BingoGame", remap = false)
+@Mixin(targets = "io.github.gaming32.bingo.BingoCommand", remap = false)
 @Pseudo
-public class BingoGameMixin {
+public class BingoCommandMixin {
     @Shadow
     @Final
     private PlayerTeam[] teams;
 
-    @Inject(method = "endGame", at = @At("RETURN"))
+    @Inject(method = "resetGame", at = @At("RETURN"))
     private void onEndGame(CallbackInfo ci) {
         for (PlayerTeam team : teams) {
             FantasyUtil.destroyTeamSpecificLevels(team);
