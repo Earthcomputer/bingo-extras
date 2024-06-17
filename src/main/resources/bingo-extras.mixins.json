@@ -4,7 +4,6 @@
   "package": "net.earthcomputer.bingoextras.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "PlayerListMixin",
     "PlayerTeamMixin",
     "RandomizableContainerBlockEntityMixin",
     "ScoreboardSaveDataMixin",
