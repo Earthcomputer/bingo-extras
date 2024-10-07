@@ -15,9 +15,11 @@
     "fantasy.EntityMixin",
     "fantasy.LocationPredicateMixin",
     "fantasy.PlayerTeamMixin",
+    "fantasy.ServerGamePacketListenerImplMixin",
     "fantasy.ServerLevelMixin",
     "fantasy.ServerPlayerMixin",
     "fantasy.ServerScoreboardMixin",
+    "fantasy.TeleportCommandMixin",
     "fantasy.bingo.BingoCommandMixin"
   ],
   "client": [

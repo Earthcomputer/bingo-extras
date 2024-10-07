@@ -12,10 +12,13 @@ import org.jetbrains.annotations.Nullable;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public final class FantasyUtil {
     public static final ThreadLocal<MinecraftServer> currentServer = new ThreadLocal<>();
+    private static final ThreadLocal<Boolean> isForcedDimensionChange = ThreadLocal.withInitial(() -> false);
 
     private FantasyUtil() {
     }
@@ -43,12 +46,37 @@ public final class FantasyUtil {
 
     public static void destroyTeamSpecificLevels(PlayerTeam team) {
         var teamSpecificLevels = ((PlayerTeamExt_Fantasy) team).bingoExtras$getTeamSpecificLevels();
-        for (RuntimeWorldHandle handle : teamSpecificLevels.values()) {
+        List<RuntimeWorldHandle> handles = new ArrayList<>(teamSpecificLevels.values());
+        teamSpecificLevels.clear();
+        for (RuntimeWorldHandle handle : handles) {
             for (ServerPlayer player : new ArrayList<>(handle.asWorld().players())) {
                 player.teleportTo(ServerLevelExt_Fantasy.getOriginalLevel(handle.asWorld()), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
             }
             handle.delete();
         }
-        teamSpecificLevels.clear();
+    }
+
+    public static void forceDimensionChange(Runnable action) {
+        boolean wasForcedDimensionChange = isForcedDimensionChange.get();
+        isForcedDimensionChange.set(true);
+        try {
+            action.run();
+        } finally {
+            isForcedDimensionChange.set(wasForcedDimensionChange);
+        }
+    }
+
+    public static <T> T forceDimensionChange(Supplier<T> action) {
+        boolean wasForcedDimensionChange = isForcedDimensionChange.get();
+        isForcedDimensionChange.set(true);
+        try {
+            return action.get();
+        } finally {
+            isForcedDimensionChange.set(wasForcedDimensionChange);
+        }
+    }
+
+    public static boolean isForcedDimensionChange() {
+        return isForcedDimensionChange.get();
     }
 }
