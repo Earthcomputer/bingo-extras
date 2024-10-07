@@ -46,14 +46,13 @@ public final class FantasyUtil {
 
     public static void destroyTeamSpecificLevels(PlayerTeam team) {
         var teamSpecificLevels = ((PlayerTeamExt_Fantasy) team).bingoExtras$getTeamSpecificLevels();
-        List<RuntimeWorldHandle> handles = new ArrayList<>(teamSpecificLevels.values());
-        teamSpecificLevels.clear();
-        for (RuntimeWorldHandle handle : handles) {
+        for (RuntimeWorldHandle handle : teamSpecificLevels.values()) {
             for (ServerPlayer player : new ArrayList<>(handle.asWorld().players())) {
-                player.teleportTo(ServerLevelExt_Fantasy.getOriginalLevel(handle.asWorld()), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+                forceDimensionChange(() -> player.teleportTo(ServerLevelExt_Fantasy.getOriginalLevel(handle.asWorld()), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot()));
             }
             handle.delete();
         }
+        teamSpecificLevels.clear();
     }
 
     public static void forceDimensionChange(Runnable action) {
