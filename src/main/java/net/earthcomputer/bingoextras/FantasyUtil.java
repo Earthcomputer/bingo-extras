@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
