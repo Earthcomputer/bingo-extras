@@ -18,7 +18,7 @@ public class DistanceFromSpawnConditionMixin {
     @ModifyExpressionValue(method = "name=/^test$/desc=/^\\(Lnet.*\\)Z$/", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/CompassItem;getSpawnPosition(Lnet/minecraft/world/level/Level;)Lnet/minecraft/core/GlobalPos;", remap = true))
     @Dynamic
     private GlobalPos modifySpawnPoint(GlobalPos original, LootContext lootContext) {
-        Entity entity = lootContext.getParam(LootContextParams.THIS_ENTITY);
+        Entity entity = lootContext.getParameter(LootContextParams.THIS_ENTITY);
         PlayerTeam team = entity.getTeam();
         if (team != null) {
             GlobalPos teamSpawnPos = PlayerTeamExt.getTeamSpawnPos(team);

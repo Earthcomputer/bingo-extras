@@ -138,7 +138,7 @@ public class BingoExtrasEarlyRiser implements Runnable {
         }
 
         long elapsed = System.nanoTime() - startTime;
-        LOGGER.info("Scanned Minecraft for dimension checks in {}ms", elapsed / 1000000);
+        LOGGER.info("Scanned Minecraft for dimension checks in {}ms, found {} classes to transform", elapsed / 1000000, result.size());
 
         return result;
     }

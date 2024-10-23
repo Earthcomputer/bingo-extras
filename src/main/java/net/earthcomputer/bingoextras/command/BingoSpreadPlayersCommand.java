@@ -114,7 +114,7 @@ public final class BingoSpreadPlayersCommand {
                 if (possibleSpreadPoints.isEmpty()) {
                     throw FAILED_TO_SPREAD_EXCEPTION.create();
                 }
-                point = possibleSpreadPoints.remove(0);
+                point = possibleSpreadPoints.removeFirst();
                 spreadPoints.set(i, point);
             }
         }
@@ -135,7 +135,7 @@ public final class BingoSpreadPlayersCommand {
         for (int i = 0; i < groups.size(); i++) {
             Vector3d dest = adjustToSafeLocation(level, spreadPoints.get(i));
             for (Entity entity : groups.get(i)) {
-                entity.teleportTo(level, dest.x, dest.y, dest.z, Set.of(), entity.getYRot(), entity.getXRot());
+                entity.teleportTo(level, dest.x, dest.y, dest.z, Set.of(), entity.getYRot(), entity.getXRot(), true);
             }
         }
 
@@ -170,10 +170,10 @@ public final class BingoSpreadPlayersCommand {
 
     public static int findSurface(ServerLevel level, int x, int z) {
         if (level.dimensionType().hasCeiling()) {
-            int startY = level.getMinBuildHeight() + (int) (level.dimensionType().logicalHeight() * 0.7);
+            int startY = level.getMinY() + (int) (level.dimensionType().logicalHeight() * 0.7);
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, 0, z);
-            for (int dy = 0; dy < startY - level.getMinBuildHeight(); dy = dy <= 0 ? -dy + 1 : -dy) {
-                if (startY + dy >= level.getMinBuildHeight() + level.dimensionType().logicalHeight()) {
+            for (int dy = 0; dy < startY - level.getMinY(); dy = dy <= 0 ? -dy + 1 : -dy) {
+                if (startY + dy >= level.getMinY() + level.dimensionType().logicalHeight()) {
                     continue;
                 }
                 if (canSpawnAt(level, pos.setY(startY + dy))) {
@@ -185,7 +185,7 @@ public final class BingoSpreadPlayersCommand {
         } else {
             LevelChunk chunk = level.getChunk(x >> 4, z >> 4);
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, 0, z);
-            for (int y = chunk.getSectionYFromSectionIndex(chunk.getHighestFilledSectionIndex()) * 16 + 16; y > level.getMinBuildHeight(); y--) {
+            for (int y = chunk.getSectionYFromSectionIndex(chunk.getHighestFilledSectionIndex()) * 16 + 16; y > level.getMinY(); y--) {
                 BlockState stateBelow = chunk.getBlockState(pos.setY(y - 1));
                 //noinspection deprecation
                 if (stateBelow.blocksMotion() && !stateBelow.is(BlockTags.LEAVES)) {
@@ -193,7 +193,7 @@ public final class BingoSpreadPlayersCommand {
                 }
             }
 
-            return level.getMinBuildHeight();
+            return level.getMinY();
         }
     }
 

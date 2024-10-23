@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -23,12 +23,16 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    include modImplementation("dev.xpple:betterconfig:${project.betterconfig_version}")
+    include modImplementation("dev.xpple:betterconfig-fabric:${project.betterconfig_version}")
 
     include modImplementation('com.github.Chocohead:Fabric-ASM:v2.3')
-    modImplementation files('libs/fantasy-0.6.3+1.21.jar')
+    modImplementation files('libs/fantasy-0.6.5+1.21.2.jar')
 
     compileOnly 'com.demonwav.mcdev:annotations:2.1.0'
+}
+
+loom {
+    accessWidenerPath = file('src/main/resources/bingo-extras.aw')
 }
 
 processResources {

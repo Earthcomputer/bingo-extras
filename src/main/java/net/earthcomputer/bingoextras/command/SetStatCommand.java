@@ -76,7 +76,7 @@ public final class SetStatCommand {
         } else if (isRegistry(stat, Registries.BLOCK)) {
             statName = stat.getType().getDisplayName().copy().append(" ").append(((Block) stat.getValue()).getName());
         } else if (isRegistry(stat, Registries.ITEM)) {
-            statName = stat.getType().getDisplayName().copy().append(" ").append(((Item) stat.getValue()).getDescription());
+            statName = stat.getType().getDisplayName().copy().append(" ").append(((Item) stat.getValue()).getName());
         } else if (isRegistry(stat, Registries.ENTITY_TYPE)) {
             statName = stat.getType().getDisplayName().copy().append(" ").append(((EntityType<?>) stat.getValue()).getDescription());
         } else {

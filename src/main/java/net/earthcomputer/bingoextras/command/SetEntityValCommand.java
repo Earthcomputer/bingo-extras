@@ -57,7 +57,7 @@ public final class SetEntityValCommand {
     private static int setHealth(CommandSourceStack source, List<LivingEntity> entities, float health) {
         for (LivingEntity entity : entities) {
             if (health == 0) {
-                entity.kill();
+                entity.kill(source.getLevel());
             } else {
                 entity.setHealth(Math.min(health, entity.getMaxHealth()));
             }
@@ -85,7 +85,7 @@ public final class SetEntityValCommand {
 
     private static int setExhaustion(CommandSourceStack source, Collection<ServerPlayer> players, float exhaustion) {
         for (ServerPlayer player : players) {
-            player.getFoodData().setExhaustion(exhaustion);
+            player.getFoodData().addExhaustion(exhaustion - player.getFoodData().exhaustionLevel);
         }
         source.sendSuccess(() -> BingoExtras.translatable("bingo_extras.setentityval.exhaustion.success", players.size(), exhaustion), true);
         return players.size();

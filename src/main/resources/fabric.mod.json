@@ -27,6 +27,7 @@
   "mixins": [
     "bingo-extras.mixins.json"
   ],
+  "accessWidener": "bingo-extras.aw",
   "depends": {
     "minecraft": "${minecraft_version}",
     "fabricloader": ">=0.15.11",

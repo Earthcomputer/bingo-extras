@@ -13,6 +13,7 @@ import xyz.nucleoid.fantasy.RuntimeWorldHandle;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public final class FantasyUtil {
@@ -47,7 +48,7 @@ public final class FantasyUtil {
         var teamSpecificLevels = ((PlayerTeamExt_Fantasy) team).bingoExtras$getTeamSpecificLevels();
         for (RuntimeWorldHandle handle : teamSpecificLevels.values()) {
             for (ServerPlayer player : new ArrayList<>(handle.asWorld().players())) {
-                forceDimensionChange(() -> player.teleportTo(ServerLevelExt_Fantasy.getOriginalLevel(handle.asWorld()), player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot()));
+                forceDimensionChange(() -> player.teleportTo(ServerLevelExt_Fantasy.getOriginalLevel(handle.asWorld()), player.getX(), player.getY(), player.getZ(), Set.of(), player.getYRot(), player.getXRot(), true));
             }
             handle.delete();
         }

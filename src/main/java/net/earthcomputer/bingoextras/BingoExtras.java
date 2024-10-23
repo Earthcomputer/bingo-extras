@@ -14,7 +14,7 @@ public class BingoExtras implements ModInitializer {
     @Override
     public void onInitialize() {
         CommandRegistrationCallback.EVENT.register((dispatcher, context, environment) -> BingoExtrasCommands.register(dispatcher, context));
-        new ModConfigBuilder("bingoextras", Configs.class).build();
+        new ModConfigBuilder<>("bingoextras", Configs.class).build();
     }
 
     public static MutableComponent translatable(@Translatable String translationKey) {
