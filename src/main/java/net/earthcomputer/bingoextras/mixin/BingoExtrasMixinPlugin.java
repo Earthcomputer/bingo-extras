@@ -23,7 +23,9 @@ public class BingoExtrasMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.startsWith(mixinPackage + ".fantasy.")) {
+        if (mixinClassName.startsWith(mixinPackage + ".bingo.")) {
+            return FabricLoader.getInstance().isModLoaded("bingo");
+        } else if (mixinClassName.startsWith(mixinPackage + ".fantasy.")) {
             return FabricLoader.getInstance().isModLoaded("fantasy");
         } else {
             return true;
