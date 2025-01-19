@@ -2,6 +2,7 @@ package net.earthcomputer.bingoextras.mixin.bingo;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.earthcomputer.bingoextras.ext.PlayerTeamExt;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -15,15 +16,15 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(targets = "io.github.gaming32.bingo.conditions.DistanceFromSpawnCondition", remap = false)
 @Pseudo
 public class DistanceFromSpawnConditionMixin {
-    @ModifyExpressionValue(method = "name=/^test$/desc=/^\\(Lnet.*\\)Z$/", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/CompassItem;getSpawnPosition(Lnet/minecraft/world/level/Level;)Lnet/minecraft/core/GlobalPos;", remap = true))
+    @ModifyExpressionValue(method = "test", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;getSharedSpawnPos()Lnet/minecraft/core/BlockPos;", remap = true))
     @Dynamic
-    private GlobalPos modifySpawnPoint(GlobalPos original, LootContext lootContext) {
+    private BlockPos modifySpawnPoint(BlockPos original, LootContext lootContext) {
         Entity entity = lootContext.getParameter(LootContextParams.THIS_ENTITY);
         PlayerTeam team = entity.getTeam();
         if (team != null) {
             GlobalPos teamSpawnPos = PlayerTeamExt.getTeamSpawnPos(team);
-            if (teamSpawnPos != null) {
-                return teamSpawnPos;
+            if (teamSpawnPos != null && teamSpawnPos.dimension() == lootContext.getLevel().dimension()) {
+                return teamSpawnPos.pos();
             }
         }
 
