@@ -23,7 +23,9 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    include modImplementation("dev.xpple:betterconfig-fabric:${project.betterconfig_version}")
+    include modImplementation("dev.xpple:betterconfig-fabric:${project.betterconfig_version}") {
+        transitive = false // betterconfig inadvertently included betterconfig
+    }
 
     include modImplementation('com.github.Chocohead:Fabric-ASM:v2.3')
     modImplementation files('libs/fantasy-0.6.5+1.21.2.jar')
