@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.earthcomputer.bingoextras.BingoExtras;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 
 import static net.minecraft.commands.Commands.*;
 
@@ -22,7 +21,7 @@ public final class ClearSpawnPointCommand {
 
     private static int clearSpawnPoint(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        player.setRespawnPosition(Level.OVERWORLD, null, 0, true, false);
+        player.setRespawnPosition(null, false);
         source.sendSuccess(() -> BingoExtras.translatable("bingo_extras.clearspawnpoint.success"), true);
         return Command.SINGLE_SUCCESS;
     }

@@ -81,7 +81,7 @@ public abstract class ServerPlayerMixin extends Player implements ServerPlayerEx
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void onLoadNbt(CompoundTag tag, CallbackInfo ci) {
-        fullbright = tag.getBoolean("bingoextras:fullbright");
+        fullbright = tag.getBooleanOr("bingoextras:fullbright", false);
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))

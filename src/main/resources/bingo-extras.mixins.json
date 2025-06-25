@@ -5,8 +5,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "PlayerTeamMixin",
+    "PlayerTeamPackedMixin",
     "RandomizableContainerBlockEntityMixin",
-    "ScoreboardSaveDataMixin",
+    "ScoreboardMixin",
     "ServerCommonPacketListenerImplMixin",
     "ServerPlayerMixin",
     "bingo.DistanceFromSpawnConditionMixin",
