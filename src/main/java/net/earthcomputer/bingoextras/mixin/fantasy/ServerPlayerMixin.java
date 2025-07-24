@@ -6,7 +6,6 @@ import com.mojang.authlib.GameProfile;
 import net.earthcomputer.bingoextras.FantasyUtil;
 import net.earthcomputer.bingoextras.ext.fantasy.PlayerTeamExt_Fantasy;
 import net.earthcomputer.bingoextras.ext.fantasy.ServerLevelExt_Fantasy;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Relative;
@@ -22,8 +21,8 @@ import java.util.Set;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {
-    public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(level, blockPos, f, gameProfile);
+    public ServerPlayerMixin(Level level, GameProfile gameProfile) {
+        super(level, gameProfile);
     }
 
     @ModifyVariable(method = "teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/server/level/ServerPlayer;", at = @At("HEAD"), argsOnly = true)

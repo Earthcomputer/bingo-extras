@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.server.commands.LootCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -39,7 +38,6 @@ public final class PlaceBonusChestCommand {
                 .then(argument("radius", integer(0))
                     .executes(ctx -> placeBonusChest(ctx.getSource(), getBlockPos(ctx, "pos"), getInteger(ctx, "radius"), context.lookupOrThrow(Registries.LOOT_TABLE).getOrThrow(BuiltInLootTables.SPAWN_BONUS_CHEST), RandomSupport.generateUniqueSeed()))
                     .then(argument("lootTable", lootTable(context))
-                        .suggests(LootCommand.SUGGEST_LOOT_TABLE)
                         .executes(ctx -> placeBonusChest(ctx.getSource(), getBlockPos(ctx, "pos"), getInteger(ctx, "radius"), getLootTable(ctx, "lootTable"), RandomSupport.generateUniqueSeed()))
                         .then(argument("seed", longArg())
                             .executes(ctx -> placeBonusChest(ctx.getSource(), getBlockPos(ctx, "pos"), getInteger(ctx, "radius"), getLootTable(ctx, "lootTable"), getLong(ctx, "seed"))))))));

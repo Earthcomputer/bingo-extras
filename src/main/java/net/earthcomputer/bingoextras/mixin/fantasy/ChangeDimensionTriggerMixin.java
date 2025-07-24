@@ -16,7 +16,7 @@ public class ChangeDimensionTriggerMixin {
     @WrapOperation(method = "trigger", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancements/critereon/ChangeDimensionTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Predicate;)V"))
     private void storeServer(ChangeDimensionTrigger instance, ServerPlayer player, Predicate<ChangeDimensionTrigger.TriggerInstance> predicate, Operation<Void> original) {
         MinecraftServer prevServer = FantasyUtil.currentServer.get();
-        FantasyUtil.currentServer.set(player.server);
+        FantasyUtil.currentServer.set(player.getServer());
         try {
             original.call(instance, player, predicate);
         } finally {
