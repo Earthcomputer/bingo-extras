@@ -10,6 +10,8 @@
     "ScoreboardMixin",
     "ServerCommonPacketListenerImplMixin",
     "ServerPlayerMixin",
+    "bingo.BingoCommandMixin",
+    "bingo.BingoGameMixin",
     "bingo.DistanceFromSpawnConditionMixin",
     "bingo.GameModeCommandMixin",
     "fantasy.ChangeDimensionTriggerInstanceMixin",

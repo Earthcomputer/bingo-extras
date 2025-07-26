@@ -1,6 +1,8 @@
 package net.earthcomputer.bingoextras.ext.fantasy;
 
 import com.google.common.base.Preconditions;
+import net.earthcomputer.bingoextras.BingoUtil;
+import net.earthcomputer.bingoextras.ext.bingo.BingoGameExt;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +22,7 @@ public interface PlayerTeamExt_Fantasy {
 
     @SuppressWarnings("deprecation")
     static ServerLevel getTeamSpecificLevel(MinecraftServer server, PlayerTeam team, ResourceKey<Level> dimension) {
+        Object bingoGame = BingoUtil.getBingoGame(server);
         return ((PlayerTeamExt_Fantasy) team).bingoExtras$getTeamSpecificLevels().computeIfAbsent(dimension, k -> {
             ServerLevel originalLevel = Objects.requireNonNull(server.getLevel(dimension), () -> "No server level associated with " + dimension);
             Preconditions.checkArgument(ServerLevelExt_Fantasy.getTeam(originalLevel) == null, "Tried to get team specific level of team level %s", dimension);
@@ -28,7 +31,7 @@ public interface PlayerTeamExt_Fantasy {
                     .setDimensionType(originalLevel.dimensionTypeRegistration())
                     .setDifficulty(originalLevel.getDifficulty())
                     .setGenerator(originalLevel.getChunkSource().getGenerator())
-                    .setSeed(originalLevel.getSeed())
+                    .setSeed(bingoGame == null ? originalLevel.getSeed() : BingoGameExt.getSeed(bingoGame))
                     .setShouldTickTime(true)
                     .setMirrorOverworldGameRules(true)
                     .setTimeOfDay(originalLevel.dayTime())

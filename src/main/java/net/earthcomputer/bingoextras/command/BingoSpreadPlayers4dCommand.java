@@ -3,6 +3,7 @@ package net.earthcomputer.bingoextras.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.earthcomputer.bingoextras.ext.fantasy.PlayerTeamExt_Fantasy;
 import net.earthcomputer.bingoextras.ext.fantasy.ServerLevelExt_Fantasy;
 import net.minecraft.commands.CommandBuildContext;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.scores.PlayerTeam;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -30,6 +32,8 @@ import static net.minecraft.commands.arguments.ResourceOrTagArgument.*;
 import static net.minecraft.commands.arguments.coordinates.Vec2Argument.*;
 
 public final class BingoSpreadPlayers4dCommand {
+    private static final SimpleCommandExceptionType NO_TARGET_LEVEL = new SimpleCommandExceptionType(() -> "No targets on a team");
+
     private BingoSpreadPlayers4dCommand() {
     }
 
@@ -56,7 +60,10 @@ public final class BingoSpreadPlayers4dCommand {
         Collection<? extends Entity> entities,
         Predicate<Holder<Biome>> excludedBiomes
     ) throws CommandSyntaxException {
-        ServerLevel level = source.getLevel();
+        ServerLevel level = getLevelToSearchIn(source.getLevel(), entities);
+        if (level == null) {
+            throw NO_TARGET_LEVEL.create();
+        }
         RandomSource rand = RandomSource.create();
         for (int attempt = 0; attempt < 100; attempt++) {
             double relX;
@@ -76,6 +83,20 @@ public final class BingoSpreadPlayers4dCommand {
         }
 
         throw BingoSpreadPlayersCommand.FAILED_TO_SPREAD_EXCEPTION.create();
+    }
+
+    @Nullable
+    private static ServerLevel getLevelToSearchIn(ServerLevel level, Collection<? extends Entity> entities) {
+        ServerLevel originalLevel = Objects.requireNonNullElse(ServerLevelExt_Fantasy.getOriginalLevel(level), level);
+
+        for (Entity entity : entities) {
+            PlayerTeam team = entity.getTeam();
+            if (team != null) {
+                return PlayerTeamExt_Fantasy.getTeamSpecificLevel(level.getServer(), team, originalLevel.dimension());
+            }
+        }
+
+        return null;
     }
 
     private static void teleportPlayers(CommandSourceStack source, BlockPos destPos, Collection<? extends Entity> entities) {

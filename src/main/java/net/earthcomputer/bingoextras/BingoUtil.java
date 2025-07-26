@@ -47,7 +47,7 @@ public final class BingoUtil {
     }
 
     @Nullable
-    private static Object getBingoGame(MinecraftServer server) {
+    public static Object getBingoGame(MinecraftServer server) {
         try {
             return FD_BINGO_GAME.get(server);
         } catch (ReflectiveOperationException e) {

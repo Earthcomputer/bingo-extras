@@ -2,6 +2,7 @@ package net.earthcomputer.bingoextras;
 
 import net.earthcomputer.bingoextras.ext.fantasy.PlayerTeamExt_Fantasy;
 import net.earthcomputer.bingoextras.ext.fantasy.ServerLevelExt_Fantasy;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -48,7 +49,9 @@ public final class FantasyUtil {
         var teamSpecificLevels = ((PlayerTeamExt_Fantasy) team).bingoExtras$getTeamSpecificLevels();
         for (RuntimeWorldHandle handle : teamSpecificLevels.values()) {
             for (ServerPlayer player : new ArrayList<>(handle.asWorld().players())) {
-                forceDimensionChange(() -> player.teleportTo(ServerLevelExt_Fantasy.getOriginalLevel(handle.asWorld()), player.getX(), player.getY(), player.getZ(), Set.of(), player.getYRot(), player.getXRot(), true));
+                ServerLevel originalLevel = Objects.requireNonNull(ServerLevelExt_Fantasy.getOriginalLevel(handle.asWorld()), "No original level for team specific world");
+                BlockPos spawnPoint = originalLevel.getSharedSpawnPos();
+                forceDimensionChange(() -> player.teleportTo(originalLevel, spawnPoint.getX() + 0.5, spawnPoint.getY(), spawnPoint.getZ() + 0.5, Set.of(), player.getYRot(), player.getXRot(), true));
             }
             handle.delete();
         }
