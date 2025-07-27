@@ -7,6 +7,7 @@ import net.earthcomputer.bingoextras.command.FullBrightCommand;
 import net.earthcomputer.bingoextras.ext.ServerPlayerExt;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,7 @@ public class BingoExtras implements ModInitializer {
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> FullBrightCommand.sendUpdate(handler.player, true));
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> FullBrightCommand.sendUpdate(newPlayer, true));
+        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> FullBrightCommand.sendUpdate(player, true));
         ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> ServerPlayerExt.setFullbright(newPlayer, ServerPlayerExt.isFullbright(oldPlayer)));
     }
 
