@@ -3,6 +3,7 @@ package net.earthcomputer.bingoextras.ext.fantasy;
 import com.google.common.base.Preconditions;
 import net.earthcomputer.bingoextras.BingoUtil;
 import net.earthcomputer.bingoextras.ext.bingo.BingoGameExt;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +39,9 @@ public interface PlayerTeamExt_Fantasy {
             );
             ServerLevelExt_Fantasy.initializeTeam(handle.asLevel(), team, originalLevel);
             if (originalLevel.dimension() == Level.END && originalLevel.dimensionTypeRegistration().is(BuiltinDimensionTypes.END)) {
-                handle.asLevel().setDragonFight(EnderDragonFight.createDefault());
+                var dragonFight = EnderDragonFight.createDefault();
+                dragonFight.init(handle.asLevel(), handle.asLevel().getSeed(), BlockPos.ZERO);
+                handle.asLevel().setDragonFight(dragonFight);
             }
             return handle;
         }).asLevel();
