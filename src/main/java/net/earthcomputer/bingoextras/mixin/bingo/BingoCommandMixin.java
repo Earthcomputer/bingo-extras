@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Pseudo
 public class BingoCommandMixin {
     @Inject(method = "startGame", at = @At(value = "INVOKE", target = "Lio/github/gaming32/bingo/ext/MinecraftServerExt;bingo$setGame(Lio/github/gaming32/bingo/game/BingoGame;)V", shift = At.Shift.AFTER))
-    private static void injectSeed(CallbackInfoReturnable<Integer> cir, @Local MinecraftServer server, @Local long seed) {
+    private static void injectSeed(CallbackInfoReturnable<Integer> cir, @Local(name = "server") MinecraftServer server, @Local(name = "seed") long seed) {
         BingoGameExt.setSeed(BingoUtil.getBingoGame(server), seed);
     }
 }
