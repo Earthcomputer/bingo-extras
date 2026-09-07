@@ -1,7 +1,7 @@
 package net.earthcomputer.bingoextras.mixin.fantasy;
 
 import net.earthcomputer.bingoextras.FantasyUtil;
-import net.minecraft.advancements.criterion.ChangeDimensionTrigger;
+import net.minecraft.advancements.triggers.ChangeDimensionTrigger;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;

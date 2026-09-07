@@ -2,7 +2,7 @@ package net.earthcomputer.bingoextras.mixin.fantasy;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.earthcomputer.bingoextras.FantasyUtil;
-import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;

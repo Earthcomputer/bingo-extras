@@ -3,7 +3,7 @@ package net.earthcomputer.bingoextras.mixin.fantasy;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.earthcomputer.bingoextras.FantasyUtil;
-import net.minecraft.advancements.criterion.ChangeDimensionTrigger;
+import net.minecraft.advancements.triggers.ChangeDimensionTrigger;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 @Mixin(ChangeDimensionTrigger.class)
 public class ChangeDimensionTriggerMixin {
-    @WrapOperation(method = "trigger", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancements/criterion/ChangeDimensionTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Predicate;)V"))
+    @WrapOperation(method = "trigger", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancements/triggers/ChangeDimensionTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Predicate;)V"))
     private void storeServer(ChangeDimensionTrigger instance, ServerPlayer player, Predicate<ChangeDimensionTrigger.TriggerInstance> predicate, Operation<Void> original) {
         MinecraftServer prevServer = FantasyUtil.currentServer.get();
         FantasyUtil.currentServer.set(player.level().getServer());

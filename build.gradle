@@ -1,10 +1,8 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
     id 'maven-publish'
 }
 
-version = project.mod_version
-group = project.maven_group
 base.archivesName = project.archives_base_name
 
 repositories {
@@ -25,7 +23,7 @@ dependencies {
     include implementation("dev.xpple:betterconfig-fabric:${project.betterconfig_version}")
 
     include implementation('com.github.Chocohead:Fabric-ASM:v2.3')
-    implementation files('libs/fantasy-0.8.0-beta.1+26.1.1.jar')
+    implementation files('libs/fantasy-0.8.3+26.2.jar')
 
     compileOnly 'com.demonwav.mcdev:annotations:2.1.0'
 }
