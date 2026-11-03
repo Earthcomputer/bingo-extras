@@ -1,0 +1,27 @@
+{
+	"parent": "minecraft:story/root",
+    "criteria": {
+    	"get_moss": {
+        	"conditions": {
+            	"items": [
+                	{
+                    	"items": "minecraft:moss_block"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+    	"description": {
+            "text": "Obtain moss"
+        },
+        "icon": {
+            "count": 1,
+        	"id": "minecraft:moss_block"
+        },
+        "title": {
+            "text": "Monica's Favorite Block"
+        }
+    }
+}

@@ -1,0 +1,1 @@
+function bingo:setup_inner with storage bingo:storage root

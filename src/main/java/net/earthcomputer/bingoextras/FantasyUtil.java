@@ -28,7 +28,11 @@ public final class FantasyUtil {
         if (server == null) {
             return teamDimension;
         }
-        ServerLevel teamLevel = Objects.requireNonNull(server.getLevel(teamDimension), () -> "Could not find server level for dimension " + teamDimension);
+        // the level may not exist, e.g. for a map of a team specific dimension that has been deleted
+        ServerLevel teamLevel = server.getLevel(teamDimension);
+        if (teamLevel == null) {
+            return teamDimension;
+        }
         ServerLevel originalLevel = ServerLevelExt_Fantasy.getOriginalLevel(teamLevel);
         if (originalLevel != null) {
             return originalLevel.dimension();
@@ -36,13 +40,12 @@ public final class FantasyUtil {
         return teamDimension;
     }
 
-    // Called from mass ASM
-    public static Level originalLevelOrSelf(Level level) {
-        if (!(level instanceof ServerLevel serverLevel)) {
-            return level;
-        }
-        ServerLevel originalLevel = ServerLevelExt_Fantasy.getOriginalLevel(serverLevel);
-        return originalLevel != null ? originalLevel : level;
+    /**
+     * Returns the dimension that {@code level} is a copy of if it is a team specific level, or its own dimension
+     * otherwise. Client levels are never mapped, since vanilla clients don't know about team specific dimensions.
+     */
+    public static ResourceKey<Level> getOriginalDimension(Level level) {
+        return getOriginalDimension(level.getServer(), level.dimension());
     }
 
     public static void destroyTeamSpecificLevels(PlayerTeam team) {

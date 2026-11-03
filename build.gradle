@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.19-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -10,9 +10,16 @@ repositories {
         name = 'xpple'
         url = 'https://maven.xpple.dev/maven2'
     }
-    maven {
-        name = 'JitPack'
-        url = 'https://jitpack.io/'
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        filter {
+            includeGroup 'maven.modrinth'
+        }
     }
 }
 
@@ -22,14 +29,30 @@ dependencies {
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     include implementation("dev.xpple:betterconfig-fabric:${project.betterconfig_version}")
 
-    include implementation('com.github.Chocohead:Fabric-ASM:v2.3')
-    implementation files('libs/fantasy-0.8.3+26.2.jar')
+    implementation files('libs/fantasy-0.8.4+26.3.jar')
+    implementation "maven.modrinth:bingo-mod:${project.bingo_version}"
 
     compileOnly 'com.demonwav.mcdev:annotations:2.1.0'
+
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${project.junit_version}"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 loom {
     accessWidenerPath = file('src/main/resources/bingo-extras.aw')
+}
+
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = 'bingo-extras-test'
+        enableGameTests = false
+        enableClientGameTests = true
+    }
 }
 
 processResources {

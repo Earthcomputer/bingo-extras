@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "bingo-extras-test",
+  "version": "1.0.0",
+  "name": "bingo-extras-test",
+  "description": "Tests for bingo-extras",
+  "authors": [
+    "Earthcomputer"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "mixins": [
+    "bingo-extras-test.mixins.json"
+  ],
+  "entrypoints": {
+    "main": [
+      "net.earthcomputer.bingoextras.gametest.BingoExtrasTest"
+    ],
+    "fabric-client-gametest": [
+      "net.earthcomputer.bingoextras.gametest.BingoExtrasClientGameTest"
+    ]
+  }
+}

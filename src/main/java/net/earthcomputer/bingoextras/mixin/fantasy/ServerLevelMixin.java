@@ -1,7 +1,14 @@
 package net.earthcomputer.bingoextras.mixin.fantasy;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.earthcomputer.bingoextras.FantasyUtil;
 import net.earthcomputer.bingoextras.ext.fantasy.ServerLevelExt_Fantasy;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.WeatherData;
 import net.minecraft.world.scores.PlayerTeam;
 import org.jetbrains.annotations.Nullable;
@@ -73,5 +80,15 @@ public abstract class ServerLevelMixin implements ServerLevelExt_Fantasy {
     @Inject(method = "resetWeatherCycle", at = @At("HEAD"))
     private void onResetWeatherCycle(CallbackInfo ci) {
         syncWeatherFromOriginal = false;
+    }
+
+    // the allowEnteringNetherUsingPortals game rule
+    @Definition(id = "toLevel", local = @Local(type = Level.class, argsOnly = true))
+    @Definition(id = "dimension", method = "Lnet/minecraft/world/level/Level;dimension()Lnet/minecraft/resources/ResourceKey;")
+    @Definition(id = "NETHER", field = "Lnet/minecraft/world/level/Level;NETHER:Lnet/minecraft/resources/ResourceKey;")
+    @Expression("@(toLevel.dimension()) == NETHER")
+    @ModifyExpressionValue(method = "isAllowedToEnterPortal", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private ResourceKey<Level> modifyPortalDimension(ResourceKey<Level> dimension, @Local(argsOnly = true) Level toLevel) {
+        return FantasyUtil.getOriginalDimension(toLevel);
     }
 }

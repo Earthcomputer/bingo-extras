@@ -12,13 +12,21 @@
     "ServerPlayerMixin",
     "TeleportTransitionMixin",
     "bingo.BingoCommandMixin",
+    "bingo.BingoGameAccessor",
     "bingo.BingoGameMixin",
     "bingo.DistanceFromSpawnConditionMixin",
     "bingo.GameModeCommandMixin",
+    "fantasy.BaseFireBlockMixin",
     "fantasy.ChangeDimensionTriggerInstanceMixin",
     "fantasy.ChangeDimensionTriggerMixin",
+    "fantasy.EndPortalBlockMixin",
     "fantasy.EntityMixin",
+    "fantasy.FallingBlockEntityMixin",
+    "fantasy.FrostedIceBlockMixin",
+    "fantasy.LevelMixin",
     "fantasy.LocationPredicateMixin",
+    "fantasy.MapItemSavedDataMixin",
+    "fantasy.NetherPortalBlockMixin",
     "fantasy.PlayerTeamMixin",
     "fantasy.PortalBlocksMixin",
     "fantasy.ServerGamePacketListenerImplMixin",
@@ -26,10 +34,15 @@
     "fantasy.ServerPlayerMixin",
     "fantasy.ServerScoreboardMixin",
     "fantasy.TeleportCommandMixin",
+    "fantasy.TheEndGatewayBlockEntityMixin",
+    "fantasy.ThrownEnderpearlMixin",
     "fantasy.bingo.BingoCommandMixin"
   ],
   "client": [
   ],
+  "mixinextras": {
+    "minVersion": "0.5.0"
+  },
   "injectors": {
     "defaultRequire": 1
   },

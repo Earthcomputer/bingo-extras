@@ -14,14 +14,8 @@
   "icon": "assets/bingo-extras/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "net.earthcomputer.bingoextras.client.BingoExtrasClient"
-    ],
     "main": [
       "net.earthcomputer.bingoextras.BingoExtras"
-    ],
-    "mm:early_risers": [
-      "net.earthcomputer.bingoextras.BingoExtrasEarlyRiser"
     ]
   },
   "mixins": [

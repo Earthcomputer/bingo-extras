@@ -1,6 +1,7 @@
 package net.earthcomputer.bingoextras.ext.fantasy;
 
 import com.google.common.base.Preconditions;
+import io.github.gaming32.bingo.game.BingoGame;
 import net.earthcomputer.bingoextras.BingoUtil;
 import net.earthcomputer.bingoextras.ext.bingo.BingoGameExt;
 import net.minecraft.core.BlockPos;
@@ -23,7 +24,7 @@ public interface PlayerTeamExt_Fantasy {
 
     @SuppressWarnings("deprecation")
     static ServerLevel getTeamSpecificLevel(MinecraftServer server, PlayerTeam team, ResourceKey<Level> dimension) {
-        Object bingoGame = BingoUtil.getBingoGame(server);
+        BingoGame bingoGame = BingoUtil.getBingoGame(server);
         return ((PlayerTeamExt_Fantasy) team).bingoExtras$getTeamSpecificLevels().computeIfAbsent(dimension, k -> {
             ServerLevel originalLevel = Objects.requireNonNull(server.getLevel(dimension), () -> "No server level associated with " + dimension);
             Preconditions.checkArgument(ServerLevelExt_Fantasy.getTeam(originalLevel) == null, "Tried to get team specific level of team level %s", dimension);

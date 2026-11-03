@@ -18,6 +18,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec2;
@@ -188,8 +189,7 @@ public final class BingoSpreadPlayersCommand {
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, 0, z);
             for (int y = chunk.getSectionYFromSectionIndex(chunk.getHighestFilledSectionIndex()) * 16 + 16; y > level.getMinY(); y--) {
                 BlockState stateBelow = chunk.getBlockState(pos.setY(y - 1));
-                //noinspection deprecation
-                if (stateBelow.blocksMotion() && !stateBelow.is(BlockTags.LEAVES)) {
+                if (blocksMotion(stateBelow) && !stateBelow.is(BlockTags.LEAVES)) {
                     return y;
                 }
             }
@@ -234,7 +234,12 @@ public final class BingoSpreadPlayersCommand {
         BlockState blockBelow = level.getBlockState(pos.below());
         return !blockHere.isSolid() && blockHere.getFluidState().isEmpty() &&
             !blockAbove.isSolid() && blockAbove.getFluidState().isEmpty() &&
-            blockBelow.blocksMotion();
+            blocksMotion(blockBelow);
+    }
+
+    @SuppressWarnings("deprecation") // Mojang studios
+    private static boolean blocksMotion(BlockState state) {
+        return !state.is(Blocks.COBWEB) && !state.is(Blocks.BAMBOO_SAPLING) && state.isSolid();
     }
 
     private static boolean isValidPoint(Vector2d[][] grid, double cellsize,
