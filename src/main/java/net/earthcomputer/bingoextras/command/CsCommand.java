@@ -15,6 +15,7 @@ import static net.minecraft.commands.Commands.*;
 
 public final class CsCommand {
     public static final SimpleCommandExceptionType PLAYING_BINGO_EXCEPTION = new SimpleCommandExceptionType(BingoExtras.translatable("bingo_extras.gamemode.playing"));
+    public static final SimpleCommandExceptionType GAME_ACTIVE_EXCEPTION = new SimpleCommandExceptionType(BingoExtras.translatable("bingo_extras.cs.gameActive"));
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(literal("cs")
@@ -29,6 +30,9 @@ public final class CsCommand {
         }
 
         if (player.isSpectator()) {
+            if (BingoUtil.getBingoGame(source.getServer()) != null) {
+                throw GAME_ACTIVE_EXCEPTION.create();
+            }
             player.setGameMode(GameType.SURVIVAL);
             source.sendSuccess(() -> Component.literal("Set game mode to survival"), true);
         } else {
