@@ -11,5 +11,7 @@
   "bingo_extras.setentityval.saturation.success": "Set the saturation of %s players to %s",
   "bingo_extras.setstat.success": "Set stat %s of %s players to %s",
   "bingo_extras.teamspawnpoint.clear.success": "Cleared the spawn point of team %s",
-  "bingo_extras.teamspawnpoint.set.success": "Set the spawn point of team %s to (%s, %s, %s)"
+  "bingo_extras.teamspawnpoint.set.success": "Set the spawn point of team %s to (%s, %s, %s)",
+  "bingo_extras.viewinventory.notSpectator": "You must be in spectator mode to view other players' inventories",
+  "bingo_extras.viewinventory.title": "%s's Inventory"
 }
